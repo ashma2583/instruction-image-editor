@@ -9,7 +9,7 @@ import sys
 
 import torch
 from diffusers import EulerAncestralDiscreteScheduler
-from PIL import Image
+from PIL import Image, ImageOps
 import torchvision.transforms.functional as TF
 
 from .common import IP2P, Components, get_device, load_components, tiny_components, tokenize
@@ -149,7 +149,7 @@ def main():
     device = get_device()
     dtype = torch.float16 if device.type == "cuda" else torch.float32
     pipe = InstructPix2PixPipeline.from_pretrained(a.model_id, a.unet_path, device=device, dtype=dtype)
-    image = Image.open(a.image).convert("RGB")
+    image = ImageOps.exif_transpose(Image.open(a.image)).convert("RGB")   # respect phone rotation
     image.thumbnail((a.resolution, a.resolution))
     out = pipe(image, a.prompt, a.steps, a.guidance_scale, a.image_guidance_scale, a.seed)[0]
     out.save(a.out)
