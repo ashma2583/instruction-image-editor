@@ -5,3 +5,8 @@ __pycache__/
 checkpoints/
 data/
 .DS_Store
+
+# Share the single prepared club-demo checkpoint; keep training runs ignored.
+!mnist-implementation/checkpoints/
+mnist-implementation/checkpoints/*
+!mnist-implementation/checkpoints/mnist_demo.pt
